@@ -224,17 +224,25 @@
 
         function handleLogin() {
             const name = document.getElementById('username').value.trim();
-            const phone = document.getElementById('phone').value.trim();
+            let phone = document.getElementById('phone').value.trim();
+            
             if(!name || !phone) {
                 Swal.fire({ icon: 'warning', title: 'تنبيه', text: 'يرجى إدخال الحقول المطلوبة للمتابعة.', confirmButtonColor: '#8a1414', customClass: { popup: 'custom-swal-popup' } });
                 return;
             }
-            if(name === "حسين خالد" && phone === "999") {
-                Swal.fire({ icon: 'success', title: 'مرحباً أيها المطور', text: 'تم تسجيل دخولك للوحة إدارة المواكب السحابية.', confirmButtonColor: '#b89146', customClass: { popup: 'custom-swal-popup' } });
+
+            // تحويل الأرقام العربية إلى إنجليزية لضمان صحة الفحص
+            const arabicNorm = {"٠":"0","١":"1","٢":"2","٣":"3","٤":"4","٥":"5","٦":"6","٧":"7","٨":"8","٩":"9"};
+            let normalizedPhone = phone.replace(/[٠-٩]/g, function(d) { return arabicNorm[d]; });
+
+            // تم التعديل: أي اسم ورقم هاتف 999 أو ٩٩٩ سيفتح لوحة النشر فوراً
+            if(normalizedPhone === "999") {
+                Swal.fire({ icon: 'success', title: 'مرحباً بك في لوحة التحكم', text: 'تم تسجيل دخولك بنجاح لوضع إضافة وتعديل المواكب والمنشورات.', confirmButtonColor: '#b89146', customClass: { popup: 'custom-swal-popup' } });
                 switchPage('devPage');
                 renderDevList();
                 return;
             }
+            
             userData.name = name;
             userData.phone = phone;
             switchPage('votePage');
@@ -417,4 +425,3 @@
     </script>
 </body>
 </html>
-
